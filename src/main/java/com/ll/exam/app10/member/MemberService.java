@@ -12,26 +12,30 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-    @Value("${custom.getFileDirPath}")
+    @Value("${custom.genFileDirPath}")
     private String genFileDirPath;
 
-    private MemberRepository memberRepository;
-    public Member getMemberByUsername(String username) {
-        return memberRepository.findByUsername(username);
+    private final MemberRepository memberRepository;
+    public Member getMemberBymembername(String membername) {
+        return memberRepository.findByMembername(membername);
     }
 
-    public Member join(String username, String password, String email, MultipartFile imgFile) {
+    public Member join(String membername, String password, String email, MultipartFile  profileImg) {
         String profileImgPath="member/"+ UUID.randomUUID()+".png";
         File profileImgFIle =new File(genFileDirPath+"/"+profileImgPath);
         profileImgFIle.mkdirs();
         try{
-            imgFile.transferTo(profileImgFIle);
+            profileImg.transferTo(profileImgFIle);
         }catch (IOException e){
             throw new RuntimeException();
         }
 
-        Member member=new Member(null,username,password,email,profileImgPath);
+        Member member=new Member(null,membername,email,password,profileImgPath);
 
         return memberRepository.save(member);
+    }
+
+    public Member getMemberById(Long id) {
+        return memberRepository.findById(id).orElse(null);
     }
 }
