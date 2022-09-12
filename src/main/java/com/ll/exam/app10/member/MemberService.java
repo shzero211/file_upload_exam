@@ -42,7 +42,19 @@ public class MemberService implements UserDetailsService {
 
         return memberRepository.save(member);
     }
+    public Member join(String username,String password,String email){
+        Member member=Member.builder()
+                .membername(username)
+                .password(password)
+                .email(email)
+                .build();
+        memberRepository.save(member);
+        return member;
 
+    }
+    public long count(){
+        return memberRepository.count();
+    }
     public Member getMemberById(Long id) {
         return memberRepository.findById(id).orElse(null);
     }
