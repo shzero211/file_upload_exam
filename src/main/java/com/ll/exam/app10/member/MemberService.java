@@ -59,6 +59,11 @@ public class MemberService implements UserDetailsService {
     public long count(){
         return memberRepository.count();
     }
+    public void removeProfileImg(Member member){
+        member.removeProfileImgOnStorage();
+        member.setProfileImg(null);
+        memberRepository.save(member);
+    }
     public Member getMemberById(Long id) {
         return memberRepository.findById(id).orElse(null);
     }

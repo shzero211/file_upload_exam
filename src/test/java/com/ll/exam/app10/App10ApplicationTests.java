@@ -1,5 +1,7 @@
 package com.ll.exam.app10;
 
+import com.ll.exam.app10.member.Member;
+import com.ll.exam.app10.member.MemberController;
 import com.ll.exam.app10.member.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -78,11 +80,22 @@ class App10ApplicationTests {
 
 		ResultActions resultActions=mvc.perform(multipart("/member/join")
 				.file(profileImg)
-				.param("username","user5")
+				.param("membername","user5")
 				.param("password","1234")
 				.param("email","user5@test.com")
 				.characterEncoding("UTF-8")).andDo(print());
 
+		resultActions
+				.andExpect(status().is3xxRedirection())
+				.andExpect(redirectedUrl("/member/profile"))
+				.andExpect(handler().handlerType(MemberController.class))
+				.andExpect(handler().methodName("memberJoin"));
+
+		Member member = memberService.getMemberById(5L);
+
+		assertThat(member).isNotNull();
+
+		memberService.removeProfileImg(member);
 
 	}
 }
