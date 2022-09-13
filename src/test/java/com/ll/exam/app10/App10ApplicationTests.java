@@ -14,7 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -47,5 +50,12 @@ class App10ApplicationTests {
 		long count= memberService.count();
 		assertThat(count).isGreaterThan(0);
 	}
-
+	@Test
+	@DisplayName("user4로 로그인후 프로필페이지에 접속하면 user4의 이메일이 보여야함")
+	void t3() throws Exception {
+		mvc.perform(get("/member/profile").with(user("user4").password("1234").roles("user")))
+				.andExpect(status().is2xxSuccessful())
+				.andExpect(content().string(containsString("user4@test.com")))
+		;
+	}
 }

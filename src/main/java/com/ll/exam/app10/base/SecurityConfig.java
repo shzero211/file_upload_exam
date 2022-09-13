@@ -20,7 +20,10 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/**")
-                .permitAll();
+                .permitAll()
+                .and()
+                .formLogin()
+                .defaultSuccessUrl("/member/profile");
         return http.build();
     }
     @Bean
