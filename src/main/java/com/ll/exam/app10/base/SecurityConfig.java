@@ -23,6 +23,8 @@ public class SecurityConfig {
                 .permitAll()
                 .and()
                 .formLogin()
+                .loginPage("/member/login")
+                .loginProcessingUrl("/member/login")
                 .defaultSuccessUrl("/member/profile");
         return http.build();
     }
