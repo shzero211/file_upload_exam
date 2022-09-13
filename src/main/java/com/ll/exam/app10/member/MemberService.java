@@ -29,16 +29,20 @@ public class MemberService implements UserDetailsService {
     }
 
     public Member join(String membername, String password, String email, MultipartFile  profileImg) {
-        String profileImgPath="member/"+ UUID.randomUUID()+".png";
-        File profileImgFIle =new File(genFileDirPath+"/"+profileImgPath);
-        profileImgFIle.mkdirs();
+        String profileImgDirName = "member";
+        String fileName = UUID.randomUUID().toString() + ".png";
+        String profileImgDirPath = genFileDirPath + "/" + profileImgDirName;
+        String profileImgFilePath = profileImgDirPath + "/" + fileName;
+
+       new File( profileImgDirPath).mkdirs();
         try{
-            profileImg.transferTo(profileImgFIle);
+            profileImg.transferTo(new File(profileImgFilePath));
         }catch (IOException e){
             throw new RuntimeException();
         }
+        String profileImgRelPath = profileImgDirName + "/" + fileName;
 
-        Member member=new Member(null,membername,email,password,profileImgPath);
+        Member member=new Member(null,membername,email,password,profileImgRelPath);
 
         return memberRepository.save(member);
     }

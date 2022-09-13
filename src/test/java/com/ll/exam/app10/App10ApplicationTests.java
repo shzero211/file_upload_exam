@@ -6,18 +6,24 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -57,5 +63,26 @@ class App10ApplicationTests {
 				.andExpect(status().is2xxSuccessful())
 				.andExpect(content().string(containsString("user4@test.com")))
 		;
+	}
+	@Test
+	@DisplayName("회원가입")
+	void t5() throws Exception {
+		String testUploadFileUrl="https://picsum.photos/200/300";
+		String originalFileName="test.png";
+
+		RestTemplate restTemplate=new RestTemplate();
+		ResponseEntity<Resource> response=restTemplate.getForEntity(testUploadFileUrl,Resource.class);
+		InputStream inputStream=response.getBody().getInputStream();
+
+		MockMultipartFile profileImg=new MockMultipartFile("profileImg",originalFileName,"image/png",inputStream);
+
+		ResultActions resultActions=mvc.perform(multipart("/member/join")
+				.file(profileImg)
+				.param("username","user5")
+				.param("password","1234")
+				.param("email","user5@test.com")
+				.characterEncoding("UTF-8")).andDo(print());
+
+
 	}
 }
