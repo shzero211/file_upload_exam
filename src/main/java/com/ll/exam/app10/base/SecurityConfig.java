@@ -26,6 +26,21 @@ public class SecurityConfig {
                 .loginPage("/member/login")
                 .loginProcessingUrl("/member/login")
                 .defaultSuccessUrl("/member/profile");
+        /*   요즘 스타일 작성
+         http
+                .csrf(
+                        csrf -> csrf.disable()
+                )
+                .authorizeRequests(
+                        authorizeRequests -> authorizeRequests
+                                .antMatchers("/**")
+                                .permitAll()
+                )
+                .formLogin(
+                        formLogin -> formLogin
+                                .loginPage("/member/login") // GET
+                                .loginProcessingUrl("/member/login") // POST
+                );*/
         return http.build();
     }
     @Bean
