@@ -26,16 +26,16 @@ public class MemberController {
     }
 
     @PostMapping("/join")
-    public String memberJoin(HttpServletRequest req, String membername, String password, String email, MultipartFile profileImg, HttpSession session){
-        Member findMember=memberService.getMemberBymembername(membername);
+    public String memberJoin(HttpServletRequest req, String username, String password, String email, MultipartFile profileImg, HttpSession session){
+        Member findMember=memberService.getMemberByUsername(username);
         String passwordClearText=password;
         password=passwordEncoder.encode(password);
         if(findMember!=null){
             return "redirect:/?errorMsg=Already done.";
         }
-        Member member=memberService.join(membername,password,email, profileImg);
+        Member member=memberService.join(username,password,email, profileImg);
         try {
-            req.login(membername,passwordClearText);
+            req.login(username,passwordClearText);
         } catch (ServletException e) {
             throw new RuntimeException(e);
         }
@@ -45,7 +45,7 @@ public class MemberController {
 
     @GetMapping("/profile")
     public String memberProfile(Principal principal,Model model){
-        Member loginedMember=memberService.getMemberBymembername(principal.getName());
+        Member loginedMember=memberService.getMemberByUsername(principal.getName());
         model.addAttribute("loginedMember",loginedMember);
         return "/member/profile";
     }

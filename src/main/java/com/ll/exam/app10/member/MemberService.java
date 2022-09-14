@@ -24,11 +24,11 @@ public class MemberService implements UserDetailsService {
     private String genFileDirPath;
 
     private final MemberRepository memberRepository;
-    public Member getMemberBymembername(String membername) {
-        return memberRepository.findByMembername(membername);
+    public Member getMemberByUsername(String username) {
+        return memberRepository.findByUsername(username);
     }
 
-    public Member join(String membername, String password, String email, MultipartFile  profileImg) {
+    public Member join(String username, String password, String email, MultipartFile  profileImg) {
         String profileImgDirName = "member";
         String fileName = UUID.randomUUID().toString() + ".png";
         String profileImgDirPath = genFileDirPath + "/" + profileImgDirName;
@@ -42,13 +42,13 @@ public class MemberService implements UserDetailsService {
         }
         String profileImgRelPath = profileImgDirName + "/" + fileName;
 
-        Member member=new Member(null,membername,email,password,profileImgRelPath);
+        Member member=new Member(null,username,email,password,profileImgRelPath);
 
         return memberRepository.save(member);
     }
     public Member join(String username,String password,String email){
         Member member=Member.builder()
-                .membername(username)
+                .username(username)
                 .password(password)
                 .email(email)
                 .build();
@@ -70,9 +70,9 @@ public class MemberService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member=memberRepository.findByMembername(username);
+        Member member=memberRepository.findByUsername(username);
         List<GrantedAuthority> authorities=new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("member"));
-        return new User(member.getMembername(),member.getPassword(),authorities);
+        return new User(member.getUsername(),member.getPassword(),authorities);
     }
 }

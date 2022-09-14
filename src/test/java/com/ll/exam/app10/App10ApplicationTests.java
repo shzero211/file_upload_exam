@@ -80,7 +80,7 @@ class App10ApplicationTests {
 
 		ResultActions resultActions=mvc.perform(multipart("/member/join")
 				.file(profileImg)
-				.param("membername","user5")
+				.param("username","user5")
 				.param("password","1234")
 				.param("email","user5@test.com")
 				.characterEncoding("UTF-8")).andDo(print());
