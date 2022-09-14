@@ -1,6 +1,7 @@
 package com.ll.exam.app10.member;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +20,13 @@ import java.security.Principal;
 public class MemberController {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
-
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/join")
     public String memberJoinForm(Model model){
         return "member/joinForm";
     }
 
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
     public String memberJoin(HttpServletRequest req, String username, String password, String email, MultipartFile profileImg, HttpSession session){
         Member findMember=memberService.getMemberByUsername(username);
@@ -49,6 +51,8 @@ public class MemberController {
         model.addAttribute("loginedMember",loginedMember);
         return "/member/profile";
     }
+
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public String showLogin(){
         return "member/login";

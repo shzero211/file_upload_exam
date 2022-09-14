@@ -25,7 +25,10 @@ public class SecurityConfig {
                 .formLogin()
                 .loginPage("/member/login")
                 .loginProcessingUrl("/member/login")
-                .defaultSuccessUrl("/member/profile");
+                .defaultSuccessUrl("/member/profile")
+                .and()
+                .logout()
+                .logoutUrl("/member/logout");
         /*   요즘 스타일 작성
          http
                 .csrf(
