@@ -51,7 +51,6 @@ public class MemberController {
         model.addAttribute("loginedMember",loginedMember);
         return "/member/profile";
     }
-
     @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public String showLogin(){
