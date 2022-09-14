@@ -33,4 +33,9 @@ public class Member {
         String profileImgPath=getProfileImg();
         new File(profileImgPath).delete();
     }
+    public String getProfileImgUrl() {
+        if ( profileImg == null ) return null;
+
+        return "/image/" + profileImg;
+    }
 }

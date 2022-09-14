@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>안녕</h1>
-[[${param.errorMsg}]]
-</body>
-</html>
+<header th:if="${loginedMember != null}">
+    user3 / <img style=" width: 200px;
+  height: 300px;" th:src="@{${loginedMemberProfileImgUrl}}" alt="">
+</header>
+
+<hr>
+
+<div>안녕</div>
