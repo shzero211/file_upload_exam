@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     public Member getMemberByUsername(String username) {
-        return memberRepository.findByUsername(username);
+        return memberRepository.findByUsername(username).orElseThrow(()-> new EntityNotFoundException());
     }
 
     public Member join(String username, String password, String email, MultipartFile  profileImg) {
