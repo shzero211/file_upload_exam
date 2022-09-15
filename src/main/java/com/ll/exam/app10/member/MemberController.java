@@ -2,6 +2,7 @@ package com.ll.exam.app10.member;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,9 +47,8 @@ public class MemberController {
     }
 
     @GetMapping("/profile")
-    public String memberProfile(Principal principal,Model model){
-        Member loginedMember=memberService.getMemberByUsername(principal.getName());
-        model.addAttribute("loginedMember",loginedMember);
+    public String memberProfile(@AuthenticationPrincipal MemberContext memberContext, Model model){
+        model.addAttribute("memberContext", memberContext);
         return "/member/profile";
     }
     @PreAuthorize("isAnonymous()")
