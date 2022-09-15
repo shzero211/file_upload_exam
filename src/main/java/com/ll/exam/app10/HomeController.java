@@ -29,4 +29,22 @@ public class HomeController {
         model.addAttribute("loginedMemberProfileImgUrl",loginedMemberProfileImgUrl);
         return "home/main";
     }
+    @GetMapping("/about")
+    public String showAbout(Principal principal,Model model){
+        Member loginedMember = null;
+        String loginedMemberProfileImgUrl = null;
+
+        if (principal != null && principal.getName() != null) {
+            loginedMember = memberService.getMemberByUsername(principal.getName());
+        }
+
+        if (loginedMember != null) {
+            loginedMemberProfileImgUrl = loginedMember.getProfileImgUrl();
+        }
+
+        model.addAttribute("loginedMember", loginedMember);
+        model.addAttribute("loginedMemberProfileImgUrl", loginedMemberProfileImgUrl);
+
+        return "home/about";
+    }
 }
