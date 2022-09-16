@@ -3,6 +3,7 @@ package com.ll.exam.app10.base;
 import com.ll.exam.app10.member.Member;
 import com.ll.exam.app10.member.MemberContext;
 import com.ll.exam.app10.member.MemberRepository;
+import com.ll.exam.app10.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,6 +27,8 @@ import java.util.Map;
 public class OAuth2UserService extends DefaultOAuth2UserService {
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private MemberService memberService;
 
     @Override
     @Transactional
@@ -65,6 +68,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                             .build();
 
                     memberRepository.save(member);
+                    memberService.setProfileImgByUrl(member,"https://picsum.photos/200/300");
                 }
             }
         } else {
